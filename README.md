@@ -1,0 +1,1 @@
+Exercises solutions for the Full Stack Open course, see more about in: https://fullstackopen.com/
