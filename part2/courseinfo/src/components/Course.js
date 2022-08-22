@@ -1,4 +1,4 @@
-const Header = ({ course }) => <h1>{course}</h1>
+const Header = ({ name }) => <h1>{name}</h1>
 
 const Part = ({ part }) => 
   <p>
