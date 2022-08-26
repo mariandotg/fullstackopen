@@ -41,9 +41,14 @@ const App = () => {
       ...newPerson,
       id:persons.length + 1
     }
-    setPersons((prev) => [...prev, person])
-    setPersonsToShow((prev) => [...prev, person])
-    setNewPerson({ name: "", number: "" })
+
+    axios
+      .post("http://localhost:3001/persons", person)
+      .then((response) => {
+        setPersons((prev) => [...prev, response.data])
+        setPersonsToShow((prev) => [...prev, response.data])
+        setNewPerson({ name: "", number: "" })
+      })
   }
 
   return (
