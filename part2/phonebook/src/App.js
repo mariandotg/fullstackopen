@@ -49,14 +49,25 @@ const App = () => {
       })
   }
 
+  const deletePerson = (id, name) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      personsServices.remove(id).then((response) => {
+        console.log(response)
+        const updatedPersons = persons.filter((person) => person.id !== id);
+        setPersons(updatedPersons);
+        setPersonsToShow(updatedPersons);
+      });
+    }
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter filter={filter} filterByName={filterByName}/>
+      <Filter filter={filter} filterByName={filterByName} />
       <h3>Add a new</h3>
       <PersonForm onSubmit={handleSubmit} newPerson={newPerson} handleChange={handleChange} />
       <h3>Numbers</h3>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} deletePerson={deletePerson} />
     </div>
   )
 }
