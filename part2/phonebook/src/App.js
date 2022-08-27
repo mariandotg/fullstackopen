@@ -35,14 +35,25 @@ const App = () => {
     event.preventDefault()
 
     const currentName = persons.filter((person) => person.name === newPerson.name);
-    if(currentName.length !== 0) return alert(`${newPerson.name} is already added to phonebook`)
-
-    const person = {
-      ...newPerson,
-      id:persons.length + 1
+    if(currentName.length !== 0) {
+      if (
+        window.confirm(
+          `${newPerson.name} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        personsServices
+          .update(currentName[0].id, newPerson)
+          .then((returnedPerson) => {
+            const updatedPersons = persons.map((person) =>
+              person.id !== returnedPerson.id ? person : returnedPerson
+            );
+            setPersons(updatedPersons);
+            setPersonsToShow(updatedPersons);
+          });
+      }
     }
-
-    personsServices.create(person).then((response) => {
+    
+    personsServices.create(newPerson).then((response) => {
         setPersons((prev) => [...prev, response])
         setPersonsToShow((prev) => [...prev, response])
         setNewPerson({ name: "", number: "" })
