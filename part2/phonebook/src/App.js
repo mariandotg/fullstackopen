@@ -3,12 +3,14 @@ import personsServices from "./services/persons"
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm '
 import Persons from './components/Persons'
+import Notification from "./components/Notification"
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newPerson, setNewPerson] = useState({ name: '', number: '' })
   const [filter, setFilter] = useState('')
   const [personsToShow, setPersonsToShow] = useState(persons);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     personsServices.getAll().then(response => {
@@ -16,6 +18,12 @@ const App = () => {
       setPersonsToShow(response)
     })
   }, [])
+
+  useEffect(() => {
+    setTimeout(() => {
+      setMessage(null);
+    }, 5000);
+  }, [message]);
 
   const filterByName = (event) => {
     const search = event.target.value;
@@ -27,7 +35,6 @@ const App = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log(event.target.value)
     setNewPerson((prev) => ({...prev, [name]: value}));
   };
 
@@ -49,6 +56,7 @@ const App = () => {
             );
             setPersons(updatedPersons);
             setPersonsToShow(updatedPersons);
+            setMessage(`Updated ${newPerson.name}`);
           });
       }
     }
@@ -56,6 +64,7 @@ const App = () => {
     personsServices.create(newPerson).then((response) => {
         setPersons((prev) => [...prev, response])
         setPersonsToShow((prev) => [...prev, response])
+        setMessage(`Added ${newPerson.name}`);
         setNewPerson({ name: "", number: "" })
       })
   }
@@ -63,7 +72,6 @@ const App = () => {
   const deletePerson = (id, name) => {
     if (window.confirm(`Delete ${name}?`)) {
       personsServices.remove(id).then((response) => {
-        console.log(response)
         const updatedPersons = persons.filter((person) => person.id !== id);
         setPersons(updatedPersons);
         setPersonsToShow(updatedPersons);
@@ -74,6 +82,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter filter={filter} filterByName={filterByName} />
       <h3>Add a new</h3>
       <PersonForm onSubmit={handleSubmit} newPerson={newPerson} handleChange={handleChange} />
