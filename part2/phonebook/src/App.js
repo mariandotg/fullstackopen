@@ -57,16 +57,21 @@ const App = () => {
             setPersons(updatedPersons);
             setPersonsToShow(updatedPersons);
             setMessage(`Updated ${newPerson.name}`);
-          });
+          })
+          .catch((error) => {
+            setMessage(
+              `Information of ${newPerson.name} has already been removed from the server`
+            )
+          })
       }
-    }
-    
-    personsServices.create(newPerson).then((response) => {
-        setPersons((prev) => [...prev, response])
-        setPersonsToShow((prev) => [...prev, response])
-        setMessage(`Added ${newPerson.name}`);
-        setNewPerson({ name: "", number: "" })
+    } else {
+      personsServices.create(newPerson).then((response) => {
+          setPersons((prev) => [...prev, response])
+          setPersonsToShow((prev) => [...prev, response])
+          setMessage(`Added ${newPerson.name}`);
+          setNewPerson({ name: "", number: "" })
       })
+    }
   }
 
   const deletePerson = (id, name) => {

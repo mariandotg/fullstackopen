@@ -1,7 +1,9 @@
 const Notification = ({ message }) => {
 	if (message === null) return null
-  
-  return <div className="success-message">{message}</div>
+	
+  const styles = message.includes("Information") ? "error-message" : "success-message"
+
+  return <div className={styles}>{message}</div>
 }
 
 export default Notification
