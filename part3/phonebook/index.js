@@ -49,31 +49,34 @@ app.delete("/api/persons/:id", (request, response) => {
   persons = persons.filter((person) => person.id !== id)
 
   response.status(204).end()
-})
+})*/
 
 app.post("/api/persons", (request, response) => {
   const body = request.body
   const { name, number } = body
-  const personExists = persons.find((person) => person.name === name)
-
+  
   if(!name || !number) return (
     response.status(400).json({
       error: "the name or number is missing",
     })
-  )
+    )
+    
+  /*const personExists = persons.find((person) => person.name === name)
 
   if(personExists) return (
     response.status(400).json({
       error: "name must be unique",
     })
-  )
+  )*/
 
-  const newPerson = { id: Math.floor(Math.random() * 1000), name, number }
+  const newPerson = new Person({
+    id: Math.floor(Math.random() * 1000), name, number
+  })
 
-  persons = [...persons, newPerson]
-
-  response.json(newPerson)
-})*/ 
+  newPerson.save().then((savedPerson) => {
+    response.json(savedPerson);
+  })
+})
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
