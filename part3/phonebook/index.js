@@ -44,19 +44,12 @@ app.get("/api/persons/:id", (request, response) => {
 
   if(person) response.json(person)
   else response.status(404).end()
-})
+}) */
 
-app.delete("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter((person) => person.id !== id)
-
-  response.status(204).end()
-})*/
-
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
   .then((result) => response.status(204).end())
-  .catch((error) => console.log(error))
+  .catch((error) => next(error))
 })
 
 app.post("/api/persons", (request, response) => {
@@ -68,14 +61,6 @@ app.post("/api/persons", (request, response) => {
       error: "the name or number is missing",
     })
     )
-    
-  /*const personExists = persons.find((person) => person.name === name)
-
-  if(personExists) return (
-    response.status(400).json({
-      error: "name must be unique",
-    })
-  )*/
 
   const newPerson = new Person({
     id: Math.floor(Math.random() * 1000), name, number
@@ -85,6 +70,22 @@ app.post("/api/persons", (request, response) => {
     response.json(savedPerson);
   })
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" })
+}
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" })
+  }
+  
+  next(error)
+}
+
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
