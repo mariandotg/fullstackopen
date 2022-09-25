@@ -1,7 +1,9 @@
 require("dotenv").config()
+
 const express = require("express")
 const morgan = require("morgan")
 const cors = require("cors")
+
 const Person = require("./models/person")
 
 const app = express()
@@ -50,6 +52,12 @@ app.delete("/api/persons/:id", (request, response) => {
 
   response.status(204).end()
 })*/
+
+app.delete("/api/persons/:id", (request, response) => {
+  Person.findByIdAndRemove(request.params.id)
+  .then((result) => response.status(204).end())
+  .catch((error) => console.log(error))
+})
 
 app.post("/api/persons", (request, response) => {
   const body = request.body
