@@ -53,8 +53,7 @@ app.delete("/api/persons/:id", (request, response, next) => {
 })
 
 app.post("/api/persons", (request, response) => {
-  const body = request.body
-  const { name, number } = body
+  const { name, number } = request.body
   
   if(!name || !number) return (
     response.status(400).json({
@@ -69,6 +68,16 @@ app.post("/api/persons", (request, response) => {
   newPerson.save().then((savedPerson) => {
     response.json(savedPerson);
   })
+})
+
+app.put("/api/persons/:id", (request, response, next) => {
+  const { name, number, id } = request.body
+
+  const newPerson = { name, number }
+
+  Person.findByIdAndUpdate(request.params.id, newPerson, { new: true })
+  .then((updatedPerson) => {response.json(updatedPerson)})
+  .catch((error) => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
