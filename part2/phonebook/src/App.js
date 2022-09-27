@@ -41,7 +41,8 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    const currentName = persons.filter((person) => person.name === newPerson.name);
+    const currentName = persons.filter((person) => person.name === newPerson.name)
+
     if(currentName.length !== 0) {
       if (
         window.confirm(
@@ -56,30 +57,29 @@ const App = () => {
             );
             setPersons(updatedPersons);
             setPersonsToShow(updatedPersons);
-            setMessage(`Updated ${newPerson.name}`);
+            setMessage(`Updated ${newPerson.name}'s number`);
           })
-          .catch((error) => {
-            setMessage(
-              `Information of ${newPerson.name} has already been removed from the server`
-            )
-          })
+          .catch((error) => setMessage(error.response.data.error));
       }
     } else {
-      personsServices.create(newPerson).then((response) => {
-          setPersons((prev) => [...prev, response])
-          setPersonsToShow((prev) => [...prev, response])
-          setMessage(`Added ${newPerson.name}`);
-          setNewPerson({ name: "", number: "" })
-      })
+      personsServices.create(newPerson)
+        .then((response) => {
+            setPersons((prev) => [...prev, response])
+            setPersonsToShow((prev) => [...prev, response])
+            setMessage(`Added ${newPerson.name}`);
+            setNewPerson({ name: "", number: "" })
+        })
+        .catch((error) => setMessage(error.response.data.error))
     }
   }
 
   const deletePerson = (id, name) => {
     if (window.confirm(`Delete ${name}?`)) {
       personsServices.remove(id).then((response) => {
-        const updatedPersons = persons.filter((person) => person.id !== id);
-        setPersons(updatedPersons);
-        setPersonsToShow(updatedPersons);
+        const updatedPersons = persons.filter((person) => person.id !== id)
+        setPersons(updatedPersons)
+        setPersonsToShow(updatedPersons)
+        setMessage(`Removed ${name} from phonebook`)
       });
     }
   };
