@@ -8,12 +8,13 @@ const Person = require("./models/person")
 
 const app = express()
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT
 
 app.use(express.json())
 app.use(cors())
 app.use(express.static("build"))
 
+// eslint-disable-next-line no-unused-vars
 morgan.token("data", (request, response) => {
   return request.method === "POST" ? JSON.stringify(request.body) : " "
 })
@@ -24,11 +25,11 @@ app.use(
 
 app.get("/api/persons", (request, response) => {
   Person.find({}).then((persons) => {
-    response.json(persons);
-  });
+    response.json(persons)
+  })
 })
 
-app.get("/info", (request, response) => {
+app.get("/info", (request, response, next) => {
   const date = new Date()
   
   Person.find({})
@@ -38,7 +39,7 @@ app.get("/info", (request, response) => {
         <p>${date}</p>
       `)
     })
-    .catch((error) => next(error));
+    .catch((error) => next(error))
 }) 
 
 app.get("/api/persons/:id", (request, response, next) => {
@@ -55,7 +56,7 @@ app.get("/api/persons/:id", (request, response, next) => {
 
 app.delete("/api/persons/:id", (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then((result) => response.status(204).end())
+    .then(() => response.status(204).end())
     .catch((error) => next(error))
 })
 
@@ -72,7 +73,7 @@ app.post("/api/persons", (request, response, next) => {
 })
 
 app.put("/api/persons/:id", (request, response, next) => {
-  const { name, number, id } = request.body
+  const { name, number } = request.body
 
   const newPerson = { name, number }
 
