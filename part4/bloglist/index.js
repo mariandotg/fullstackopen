@@ -1,4 +1,4 @@
-
+require('dotenv').config()
 // eslint-disable-next-line no-unused-vars
 const http = require('http')
 const express = require('express')
@@ -15,7 +15,7 @@ const blogSchema = new mongoose.Schema({
 
 const Blog = mongoose.model('Blog', blogSchema)
 
-const mongoUrl = 'mongodb+srv://fullstack:xXszGptiIwyTsqPo@cluster0.6eqjwkq.mongodb.net/bloglistApp?retryWrites=true&w=majority'
+const mongoUrl = process.env.MONGODB_URI
 mongoose.connect(mongoUrl)
 
 app.use(cors())
