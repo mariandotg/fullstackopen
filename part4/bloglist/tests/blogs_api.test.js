@@ -1,5 +1,6 @@
 const supertest = require('supertest')
 const mongoose = require('mongoose')
+const testHelper = require('./test_helper')
 const testResources = require('./test_resources')
 const app = require('../app')
 
@@ -16,7 +17,7 @@ test('blogs are returned as json', async () => {
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
-})
+}, 100000)
 
 test('all blogs are returned', async () => {
   const response = await api.get('/api/blogs')
@@ -31,6 +32,27 @@ test('blogs have id property named id instead of _id', async () => {
   for (const id of ids) {
     expect(id).toBeDefined()
   }
+})
+
+test('a valid blog can be added ', async () => {
+  const newBlog = {
+    title: 'test blog',
+    author: 'Mariano Guillaume',
+    url: 'https://www.marianoguillaume.com',
+    likes: 77
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await testHelper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(testResources.initialBlogs.length + 1)
+
+  const titles = blogsAtEnd.map((blog) => blog.title)
+  expect(titles).toContain('test blog')
 })
 
 afterAll(() => {
