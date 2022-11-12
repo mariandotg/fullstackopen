@@ -24,6 +24,15 @@ test('all blogs are returned', async () => {
   expect(response.body).toHaveLength(testResources.initialBlogs.length)
 })
 
+test('blogs have id property named id instead of _id', async () => {
+  const response = await api.get('/api/blogs')
+  const ids = response.body.map((blog) => blog.id)
+
+  for (const id of ids) {
+    expect(id).toBeDefined()
+  }
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
