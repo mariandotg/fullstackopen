@@ -23,6 +23,7 @@ const blogSchema = new mongoose.Schema({
     type: Number,
     minlength: 1,
     maxlength: 10,
+    default: 0,
     required: true
   }
 })
