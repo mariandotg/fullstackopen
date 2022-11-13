@@ -13,6 +13,19 @@ const initialBlogs = [
   }
 ]
 
+const initialUsers = [
+  {
+    username: 'hellas',
+    name: 'Arto Hellas',
+    id: '627bd77f33e418039572306d'
+  },
+  {
+    username: 'mluukkai',
+    name: 'Matti Luukkainen',
+    id: '627bd7b233e4180395723071'
+  }
+]
+
 const listWithZeroBlog = []
 const listWithOneBlog = [
   {
@@ -77,6 +90,7 @@ const listWithMoreBlog = [
 
 module.exports = {
   initialBlogs,
+  initialUsers,
   listWithZeroBlog,
   listWithOneBlog,
   listWithMoreBlog
