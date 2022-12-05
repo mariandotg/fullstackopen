@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm';
 import LoginForm from './components/LoginForm'
+import Notification from './components/Notification';
 
 import blogService from './services/blogs'
 import loginService from "./services/login";
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState(null);
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -17,6 +18,15 @@ const App = () => {
       setBlogs(blogs)
     )  
   }, [])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [notification])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("FSOpenBlogListAppUser")
@@ -37,7 +47,7 @@ const App = () => {
       setUser(user)
       window.localStorage.setItem("FSOpenBlogListAppUser", JSON.stringify(user))
     } catch (exception) {
-      setErrorMessage("Wrong Credentials")
+      setNotification("Error: Wrong Credentials")
     }
   }
 
@@ -54,13 +64,15 @@ const App = () => {
         url,
       })
       setBlogs(blogs.concat(blog))
+      setNotification(`A new blog ${title} by ${author} added`)
     } catch (exception) {
-      setErrorMessage("Something went horribly wrong")
+      setNotification("Error: Something went horribly wrong")
     }
   }
 
   return (
     <div>
+      <Notification message={notification} />
       {user === null ? (
         <div>
           <h2>log in to application</h2>
