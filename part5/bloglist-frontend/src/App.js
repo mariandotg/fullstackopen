@@ -17,6 +17,15 @@ const App = () => {
     )  
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("FSOpenBlogListAppUser")
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
+
   const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({
@@ -24,12 +33,16 @@ const App = () => {
         password,
       })
       setUser(user)
+      window.localStorage.setItem("FSOpenBlogListAppUser", JSON.stringify(user));
     } catch (exception) {
       setErrorMessage("Wrong Credentials")
-      console.log(exception)
     }
   }
 
+  const handleLogout = () => {
+    window.localStorage.removeItem("FSOpenBlogListAppUser")
+    setUser(null)
+  }
   return (
     <div>
       {user === null ? (
@@ -41,6 +54,7 @@ const App = () => {
           <div>
             <p>
               <span className="active-user">{user.name}</span> logged in
+              <button onClick={handleLogout}>logout</button>
             </p>
             <h2>blogs</h2>
             {blogs.map(blog =>
