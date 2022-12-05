@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import Blog from './components/Blog'
+import BlogForm from './components/BlogForm';
 import LoginForm from './components/LoginForm'
 
 import blogService from './services/blogs'
@@ -32,8 +33,9 @@ const App = () => {
         username,
         password,
       })
+      blogService.setToken(user.token)
       setUser(user)
-      window.localStorage.setItem("FSOpenBlogListAppUser", JSON.stringify(user));
+      window.localStorage.setItem("FSOpenBlogListAppUser", JSON.stringify(user))
     } catch (exception) {
       setErrorMessage("Wrong Credentials")
     }
@@ -43,6 +45,20 @@ const App = () => {
     window.localStorage.removeItem("FSOpenBlogListAppUser")
     setUser(null)
   }
+
+  const createBlog = async (title, author, url) => {
+    try {
+      const blog = await blogService.create({
+        title,
+        author,
+        url,
+      })
+      setBlogs(blogs.concat(blog))
+    } catch (exception) {
+      setErrorMessage("Something went horribly wrong")
+    }
+  }
+
   return (
     <div>
       {user === null ? (
@@ -57,6 +73,7 @@ const App = () => {
               <button onClick={handleLogout}>logout</button>
             </p>
             <h2>blogs</h2>
+            <BlogForm createBlog={createBlog} />
             {blogs.map(blog =>
               <Blog key={blog.id} blog={blog} />
             )}
