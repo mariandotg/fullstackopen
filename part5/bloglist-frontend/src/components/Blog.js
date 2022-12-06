@@ -30,10 +30,10 @@ const Blog = ({ blog, updateLikes, deleteBlog }) => {
       <div>
         <span className="title">{blog.title} - </span>
         <span className="author">{blog.author}</span>
-        <button onClick={toggleVisibility}>{visible ? "hide" : "show"}</button>
+        <button className="view-button" onClick={toggleVisibility}>{visible ? "hide" : "show"}</button>
       </div>
       {visible && (
-        <div>
+        <div className="blog-details">
           <div>{blog.url}</div>
           <div>
             Likes: {blog.likes} <button onClick={handleLike}>like</button>

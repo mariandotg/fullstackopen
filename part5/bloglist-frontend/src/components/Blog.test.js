@@ -1,6 +1,6 @@
 import React from "react"
 import "@testing-library/jest-dom/extend-expect"
-import { render } from "@testing-library/react"
+import { render, fireEvent } from "@testing-library/react"
 import Blog from "./Blog"
 
 describe("<Blog />", () => {
@@ -12,6 +12,11 @@ describe("<Blog />", () => {
     author: "Author",
     url: "https://www.test.com/",
     likes: 0,
+    user: {
+      username: "username",
+      name: "name",
+      id: 0,
+    },
   }
 
   beforeEach(() => {
@@ -35,4 +40,12 @@ describe("<Blog />", () => {
     expect(component.queryByText(blog.url)).not.toBeInTheDocument()
     expect(component.queryByText("like")).not.toBeInTheDocument()
   })
-});
+
+  test("Displays blog details when view button is clicked", () => {
+    const button = component.container.querySelector(".view-button")
+    fireEvent.click(button)
+
+    const blogDetails = component.container.querySelector(".blog-details")
+    expect(blogDetails).toBeInTheDocument()
+  })
+})
