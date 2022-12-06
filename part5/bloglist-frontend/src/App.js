@@ -76,12 +76,12 @@ const App = () => {
     }
   }
 
-  const updateLikes = async (id, updatedBlog) => {
+  const updateLikes = async (id, blogToUpdate) => {
     try {
-      const response = await blogService.update(id, updatedBlog)
+      const updatedBlog = await blogService.update(id, blogToUpdate)
 
       setBlogs(
-        blogs.map((blog) => (blog.id === response.id ? response : blog))
+        blogs.map((blog) => (blog.id === id ? updatedBlog : blog))
       )
     } catch (exception) {
       setNotification(`Error: ${exception.response.data.error}`)
