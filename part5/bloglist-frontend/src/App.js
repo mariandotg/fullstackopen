@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from "react"
 
-import Blog from './components/Blog'
-import BlogForm from './components/BlogForm'
-import LoginForm from './components/LoginForm'
-import Notification from './components/Notification'
+import Blog from "./components/Blog"
+import BlogForm from "./components/BlogForm"
+import LoginForm from "./components/LoginForm"
+import Notification from "./components/Notification"
 import Togglable from "./components/Togglable"
 
-import blogService from './services/blogs'
+import blogService from "./services/blogs"
 import loginService from "./services/login"
 
 const App = () => {
@@ -21,8 +21,8 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
-      )  
-    }, [])
+    )
+  }, [])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -108,19 +108,19 @@ const App = () => {
           <h2>log in to application</h2>
           <LoginForm handleLogin={handleLogin} />
         </div>
-        ) : (
-          <div>
-            <p>
-              <span className="active-user">{user.name}</span> logged in
-              <button onClick={handleLogout}>logout</button>
-            </p>
-            <h2>blogs</h2>
-            <Togglable buttonLabel="new blog" ref={blogFormRef}>
-              <BlogForm createBlog={createBlog} />
-            </Togglable>
-            {blogsSortedByLikes.map(blog =>
-              <Blog key={blog.id} blog={blog} updateLikes={updateLikes} deleteBlog={deleteBlog} />
-            )}
+      ) : (
+        <div>
+          <p>
+            <span className="active-user">{user.name}</span> logged in
+            <button onClick={handleLogout}>logout</button>
+          </p>
+          <h2>blogs</h2>
+          <Togglable buttonLabel="new blog" ref={blogFormRef}>
+            <BlogForm createBlog={createBlog} />
+          </Togglable>
+          {blogsSortedByLikes.map(blog =>
+            <Blog key={blog.id} blog={blog} updateLikes={updateLikes} deleteBlog={deleteBlog} />
+          )}
         </div>
       )}
     </div>

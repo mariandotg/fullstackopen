@@ -1,6 +1,6 @@
-import axios from 'axios'
+import axios from "axios"
 import jwt from "jwt-decode"
-const baseUrl = '/api/blogs'
+const baseUrl = "/api/blogs"
 
 let token = null
 
@@ -40,5 +40,5 @@ const remove = async (blogId) => {
   const response = await axios.delete(deleteUrl, config)
   return response.data
 }
-
+//eslint-disable-next-line
 export default { getAll, getUserId, setToken, create, update, remove }

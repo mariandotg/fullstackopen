@@ -15,7 +15,7 @@ const Blog = ({ blog, updateLikes, deleteBlog }) => {
     const updatedBlog = {
       likes: blog.likes + 1
     }
-    
+
     updateLikes(blog.id, updatedBlog)
   }
 
