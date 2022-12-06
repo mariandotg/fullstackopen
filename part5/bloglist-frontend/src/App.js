@@ -88,6 +88,18 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async (blogId) => {
+    try {
+      await blogService.remove(blogId)
+
+      const updatedBlogs = blogs.filter((blog) => blog.id !== blogId)
+      setBlogs(updatedBlogs)
+      setNotification("Blog removed")
+    } catch (exception) {
+      setNotification(`Error: ${exception.response.data.error}`)
+    }
+  }
+
   return (
     <div>
       <Notification message={notification} />
@@ -107,7 +119,7 @@ const App = () => {
               <BlogForm createBlog={createBlog} />
             </Togglable>
             {blogsSortedByLikes.map(blog =>
-              <Blog key={blog.id} blog={blog} updateLikes={updateLikes} />
+              <Blog key={blog.id} blog={blog} updateLikes={updateLikes} deleteBlog={deleteBlog} />
             )}
         </div>
       )}
