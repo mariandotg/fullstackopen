@@ -11,14 +11,18 @@ import loginService from "./services/login"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [notification, setNotification] = useState(null);
+  const [notification, setNotification] = useState(null)
   const [user, setUser] = useState(null)
+
+  const blogFormRef = useRef()
+
+  const blogsSortedByLikes = blogs.sort((a, b) => b.likes - a.likes)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
-    )  
-  }, [])
+      )  
+    }, [])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -84,8 +88,6 @@ const App = () => {
     }
   }
 
-  const blogFormRef = useRef()
-
   return (
     <div>
       <Notification message={notification} />
@@ -104,7 +106,7 @@ const App = () => {
             <Togglable buttonLabel="new blog" ref={blogFormRef}>
               <BlogForm createBlog={createBlog} />
             </Togglable>
-            {blogs.map(blog =>
+            {blogsSortedByLikes.map(blog =>
               <Blog key={blog.id} blog={blog} updateLikes={updateLikes} />
             )}
         </div>
