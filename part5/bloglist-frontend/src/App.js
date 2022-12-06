@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import Blog from './components/Blog'
-import BlogForm from './components/BlogForm';
+import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
-import Notification from './components/Notification';
+import Notification from './components/Notification'
+import Togglable from "./components/Togglable"
 
 import blogService from './services/blogs'
-import loginService from "./services/login";
+import loginService from "./services/login"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -58,6 +59,7 @@ const App = () => {
 
   const createBlog = async (title, author, url) => {
     try {
+      blogFormRef.current.toggleVisibility()
       const blog = await blogService.create({
         title,
         author,
@@ -69,6 +71,8 @@ const App = () => {
       setNotification("Error: Something went horribly wrong")
     }
   }
+
+  const blogFormRef = useRef()
 
   return (
     <div>
@@ -85,7 +89,9 @@ const App = () => {
               <button onClick={handleLogout}>logout</button>
             </p>
             <h2>blogs</h2>
-            <BlogForm createBlog={createBlog} />
+            <Togglable buttonLabel="new blog" ref={blogFormRef}>
+              <BlogForm createBlog={createBlog} />
+            </Togglable>
             {blogs.map(blog =>
               <Blog key={blog.id} blog={blog} />
             )}
