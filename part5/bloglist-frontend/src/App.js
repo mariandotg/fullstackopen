@@ -48,7 +48,7 @@ const App = () => {
       setUser(user)
       window.localStorage.setItem("FSOpenBlogListAppUser", JSON.stringify(user))
     } catch (exception) {
-      setNotification("Error: Wrong Credentials")
+      setNotification(`Error: ${exception.response.data.error}`)
     }
   }
 
@@ -68,7 +68,19 @@ const App = () => {
       setBlogs(blogs.concat(blog))
       setNotification(`A new blog ${title} by ${author} added`)
     } catch (exception) {
-      setNotification("Error: Something went horribly wrong")
+      setNotification(`Error: ${exception.response.data.error}`)
+    }
+  }
+
+  const updateLikes = async (id, updatedBlog) => {
+    try {
+      const response = await blogService.update(id, updatedBlog)
+
+      setBlogs(
+        blogs.map((blog) => (blog.id === response.id ? response : blog))
+      )
+    } catch (exception) {
+      setNotification(`Error: ${exception.response.data.error}`)
     }
   }
 
@@ -93,7 +105,7 @@ const App = () => {
               <BlogForm createBlog={createBlog} />
             </Togglable>
             {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} />
+              <Blog key={blog.id} blog={blog} updateLikes={updateLikes} />
             )}
         </div>
       )}
