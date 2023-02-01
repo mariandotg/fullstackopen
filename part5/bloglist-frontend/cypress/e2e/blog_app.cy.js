@@ -72,6 +72,12 @@ describe("Blog app", () => {
           cy.contains("Third blog").parent().find("button").click();
           cy.get("#like-btn").click();
         });
+
+        it("One of those can be deleted", () => {
+          cy.contains("Second blog").parent().find("button").click();
+          cy.get("#delete-btn").click();
+          cy.get("html").should("not.contain", "Second blog");
+        });
       })
     });
   });
