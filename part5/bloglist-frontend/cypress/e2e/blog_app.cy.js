@@ -33,5 +33,23 @@ describe("Blog app", () => {
 
       cy.get("html").should("not.contain", "Mariano Guillaume logged in");
     });
+
+    describe("When logged in", () => {
+      beforeEach(() => {
+        cy.login({ username: "marianoguillaume", password: "password" });
+      });
+  
+      it('A new blog can be created', () => {
+        cy.createBlog({
+          title: "A blog created by Mariano Guillaume",
+          author: "Mariano Guillaume",
+          url: "https://www.marianoguillaume.com/",
+        });
+  
+        cy.contains("A blog created by Mariano Guillaume");
+      })
+    });
   });
+
+
 });
