@@ -94,6 +94,25 @@ describe("Blog app", () => {
           cy.contains("Second blog").parent().find("button").click();
           cy.get("html").should("not.contain", "delete");
         });
+
+        it("They are ordered by the number of likes in descending order", async () => {
+          cy.contains("Third blog").parent().find("button").click();
+          cy.get("#like-btn").click().wait(500).click().wait(500);
+          cy.contains("Third blog").parent().find("button").click();
+  
+          cy.contains("Second blog").parent().find("button").click();
+          cy.get("#like-btn")
+            .click()
+            .wait(500)
+            .click()
+            .wait(500)
+            .click()
+            .wait(500);
+  
+          cy.get(".blog-style").eq(0).should("contain", "Second blog");
+          cy.get(".blog-style").eq(1).should("contain", "Third blog");
+          cy.get(".blog-style").eq(2).should("contain", "First blog");
+        });
       })
     });
   });
