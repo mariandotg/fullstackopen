@@ -48,6 +48,31 @@ describe("Blog app", () => {
   
         cy.contains("A blog created by Mariano Guillaume");
       })
+
+      describe("And several blogs exist", () => {
+        beforeEach(() => {
+          cy.createBlog({
+            title: "First blog",
+            author: "Mariano Guillaume",
+            url: "https://www.test1.com/",
+          });
+          cy.createBlog({
+            title: "Second blog",
+            author: "Mariano Guillaume",
+            url: "https://www.test2.com/",
+          });
+          cy.createBlog({
+            title: "Third blog",
+            author: "Mariano Guillaume",
+            url: "https://www.test3.com/",
+          });
+        });
+
+        it("One of those can be liked", () => {
+          cy.contains("Third blog").parent().find("button").click();
+          cy.get("#like-btn").click();
+        });
+      })
     });
   });
 
