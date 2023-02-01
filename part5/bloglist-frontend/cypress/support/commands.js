@@ -7,6 +7,10 @@ Cypress.Commands.add("login", ({ username, password }) => {
       cy.visit("http://localhost:3000");
     });
   });
+
+Cypress.Commands.add("logout", () => {
+    window.localStorage.removeItem("FSOpenBlogListAppUser")
+  });
   
 Cypress.Commands.add("createBlog", ({ title, author, url }) => {
     const token = JSON.parse(localStorage.getItem("FSOpenBlogListAppUser")).token

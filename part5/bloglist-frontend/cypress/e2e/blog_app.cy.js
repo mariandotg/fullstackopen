@@ -78,6 +78,22 @@ describe("Blog app", () => {
           cy.get("#delete-btn").click();
           cy.get("html").should("not.contain", "Second blog");
         });
+
+        it("Only user that created the blog can view the delete button", () => {
+          cy.contains("Second blog").parent().find("button").click();
+          cy.get("html").should("contain", "delete");
+          cy.logout();
+          const user = {
+            name: "Fullstackopen",
+            username: "fullstackopen",
+            password: "password",
+          };
+          cy.request("POST", "http://localhost:3003/api/users/", user);
+          cy.visit("http://localhost:3000");
+          cy.login({ username: "fullstackopen", password: "password"});
+          cy.contains("Second blog").parent().find("button").click();
+          cy.get("html").should("not.contain", "delete");
+        });
       })
     });
   });
